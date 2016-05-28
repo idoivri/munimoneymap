@@ -5,23 +5,33 @@ body {
     margin: 0;
 }
 
-#header-wrap {
-    background: #66cc66;
-    position: fixed;
-    width: 100%;
-    height: 100px;
-    top: 0;
-    z-index: 1;
-    text-align: center;
-}
 
 html, body, #map {
-	direction: rtl;
+/*    position: relative; 
+
+	direction: rtl;*/
     height: 100%;
-    margin-top: 50px;
+    /*margin-top: 50px;*/
 }
 
 .leaflet-popup-content {
 	direction: rtl;
 	text-align: right;
+}
+
+
+.legend label,
+.legend span {
+    direction: rtl;
+    display:block;
+    float:left;
+    height:15px;
+    width:20%;
+    text-align:center;
+    font-size:9px;
+    color:#808080;
+}
+
+.legend-title {
+    direction: rtl;
 }
