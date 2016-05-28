@@ -42,17 +42,24 @@
 	  	<strong>מפת הארנונה</strong>
 	  </div>
 	  <nav class='legend clearfix'>
-	    <span style='background:#F1EEF6;'></span>
-	    <span style='background:#BDC9E1;'></span>
-	    <span style='background:#74A9CF;'></span>
-	    <span style='background:#2B8CBE;'></span>
-	    <span style='background:#045A8D;'></span>
-	    <label>45</label>
-	    <label>48</label>
-	    <label>50</label>
-	    <label>53</label>
-	    <label>55</label>
+	  	<!-- http://colorbrewer2.org/ -->
+	    <span style='background:#005824;'></span>
+	    <span style='background:#fee5d9;'></span>
+	    <span style='background:#fcbba1;'></span>
+	    <span style='background:#fc9272;'></span>
+	    <span style='background:#fb6a4a;'></span>
+	    <span style='background:#de2d26;'></span>
+	    <span style='background:#a50f15;'></span>
+	    <label>ֿ0 &gt</label>
+	    <label>&lt 5</label>
+	    <label>&lt 10</label>
+	    <label>&lt 15</label>
+	    <label>&lt 20</label>
+	    <label>&lt 25</label>
+	    <label>+25</label>
 	    <small>Source: <a href="#link to source">Yogev Sharvit</a></small>
+
+
 
 	</div>
 	<div id="map">
@@ -62,6 +69,19 @@
 		
 
 	<script>
+
+
+		var getDifferenceColor = function (d) {
+			// console.log("got difference ",d);
+		    return d < 0 ? '#005824' :
+		           d < 5  ? '#fee5d9' :
+		           d < 10  ? '#fcbba1' :
+		           d < 15  ? '#fc9272' :
+		           d < 20   ? '#fb6a4a' :
+		           d < 25   ? '#de2d26' :
+		                      '#a50f15';
+		}
+
 		// Provide your access token
 		L.mapbox.accessToken = 'pk.eyJ1IjoiaWRvaXZyaSIsImEiOiJtSDZZd0dzIn0.AGwQs7X6LESuybqo6fUVpg#10';
 		// Create a map in the div #map
@@ -107,11 +127,7 @@
 					line = results.data[i];
 
 
-					var layerStyle = {
-								        fillColor: 'blue',
-								        color: 'red',
-								        fillOpacity: 0.6,
-									};
+
 
 
 			        //console.log("COORDS: " + line[12] + "," + line[11]);
@@ -128,13 +144,19 @@
 
 			        	name = line[1]; //url name relies 
 
+			      //   	var layerStyle = {
+								 //        fillColor: getDifferenceColor(line[line.length-1]),
+								 //        color: 'black',
+								 //        fillOpacity: 0.6,
+									// };
+
 						var urlString = 'http://cdn.rawgit.com/idoivri/israel-municipalities-polygons/master/'+name+'/'+name+'.geojson';
 
 
 						var geoJsonLayerData;
 
 						$.get(urlString, function(data) {
-							console.log("data:",data);
+							//console.log("data:",data);
 						  	geoJsonLayerData = data;
 
 						  	if (!geoJsonLayerData) {
@@ -142,7 +164,13 @@
 								return;
 							}
 
-							var geojsonLayer = new L.GeoJSON(geoJsonLayerData, {style: layerStyle}); 
+								
+
+							var geojsonLayer = new L.GeoJSON(geoJsonLayerData, {style: {
+								fillColor: getDifferenceColor(line[14]),
+								color: 'black',
+								fillOpacity: 0.6}
+							}); 
 
 					        if (!geojsonLayer) {
 					        	console.log("coulnd't create get layer for: "+layer[0]);
@@ -150,7 +178,9 @@
 					        }
 
 					        var content = "<b>"+line[0]+"</b><br/>"+
-					        				"תעריף נורמטיבי למגורים: "+line[7];
+					        				"תעריף נורמטיבי למגורים: "+line[7]+"<br/>"+
+					        				"תעריף בפועל: "+line[9]+"<br/>"+
+					        				"<b>"+"הפרש התעריף בין המצוי לרצוי: "+line[14]+"</b><br/>"; 
 
 					        geojsonLayer.bindPopup(content);
 
@@ -202,6 +232,8 @@
 
 		// 	return str;	
 		// };
+
+
 
 	</script>
 </body>
