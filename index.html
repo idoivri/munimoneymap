@@ -136,26 +136,29 @@
 						$.get(urlString, function(data) {
 							console.log("data:",data);
 						  	geoJsonLayerData = data;
+
+						  	if (!geoJsonLayerData) {
+								console.log("did not get geoJsonLayerData!");
+								return;
+							}
+
+							var geojsonLayer = new L.GeoJSON(geoJsonLayerData, {style: layerStyle}); 
+
+					        if (!geojsonLayer) {
+					        	console.log("coulnd't create get layer for: "+layer[0]);
+					        	return;
+					        }
+
+					        var content = "<b>"+line[0]+"</b><br/>"+
+					        				"תעריף נורמטיבי למגורים: "+line[7];
+
+					        geojsonLayer.setPopupContent(content);
+
+					        map.addLayer(geojsonLayer);
+
 						});
 
-						if (!geoJsonLayerData) {
-							console.log("did not get geoJsonLayerData!");
-							continue;
-						}
-
-						var geojsonLayer = new L.GeoJSON(geoJsonLayerData, {style: layerStyle}); 
-
-				        if (!geojsonLayer) {
-				        	console.log("coulnd't create get layer for: "+layer[0]);
-				        	continue;
-				        }
-
-				        var content = "<b>"+line[0]+"</b><br/>"+
-				        				"תעריף נורמטיבי למגורים: "+line[7];
-
-				        geojsonLayer.setPopupContent(content);
-
-				        map.addLayer(geojsonLayer);
+						
 				     //    else {
 				     //    	var str = createPopUpStr(results.data[i]);	
 					    //     var marker = new PruneCluster.Marker(lng, lat)
