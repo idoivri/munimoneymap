@@ -92,7 +92,7 @@
 		
 
 
-		Papa.parse("data/munis-arnona.csv", {
+		Papa.parse("./data/munis-arnona.csv", {
 			header: false,
 			download: true,
 			complete: function(results) {
@@ -129,10 +129,18 @@
 						var urlString = 'http://cdn.rawgit.com/idoivri/israel-municipalities-polygons/master/'+name+'/'+name+'.geojson';
 
 
-						
+						var geoJsonLayerData;
 
-						var geojsonLayer = new L.GeoJSON.AJAX(urlString, {style: layerStyle}); //this works!
+						$.get(urlString, function(data) {
+						  geoJsonLayerData = data;
+						});
 
+						if (!geoJsonLayerData) {
+							consoe.log("did not get geoJsonLayerData!");
+							continue;
+						}
+
+						var geojsonLayer = new L.GeoJSON(geoJsonLayerData, {style: layerStyle}); 
 
 				        if (!geojsonLayer) {
 				        	console.log("coulnd't create get layer for: "+layer[0]);
