@@ -93,16 +93,16 @@
 
 
 		Papa.parse("./data/munis-arnona.csv", {
-			header: true,
+			header: false,
 			download: true,
 			complete: function(results) {
 
 				//console.log(results);
 				var len = results.data.length;
 
-				console.log(results.data[0]);
+				console.log(results.data[1]);
 
-				for (var i=0; i<len; i++){
+				for (var i=1; i<len; i++){
 					//console.log(results.data[i]);
 					line = results.data[i];
 
