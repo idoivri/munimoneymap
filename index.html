@@ -134,7 +134,8 @@
 						var geoJsonLayerData;
 
 						$.get(urlString, function(data) {
-						  geoJsonLayerData = data;
+							console.log("data:",data);
+						  	geoJsonLayerData = data;
 						});
 
 						if (!geoJsonLayerData) {
