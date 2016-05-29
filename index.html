@@ -39,7 +39,8 @@
 	</div> -->
 	<div id='legend' style='display:none;'>
 	  <div class='legend-title'>
-	  	<strong>מפת הארנונה</strong>
+	  	<p><strong>מפת הארנונה:</strong> ההפרש בין הרצוי למצוי</p>
+	  	<p>כל התעריפים המצוינים במפה הם ש״ח למטר מגורים ממוצע</p> 
 	  </div>
 	  <nav class='legend clearfix'>
 	  	<!-- http://colorbrewer2.org/ -->
@@ -57,7 +58,7 @@
 	    <label>&lt 20</label>
 	    <label>&lt 25</label>
 	    <label>+25</label>
-	    <small>Source: <a href="#link to source">Yogev Sharvit</a></small>
+	    <small>Source: <a href="http://muni-index.co.il">Yogev Sharvit</a></small>
 
 
 
@@ -210,9 +211,9 @@
 					        }
 
 					        var content = "<b>רשות מקומית: "+muniObject.muniHebName+"</b><br/>"+
-					        				"תעריף נורמטיבי למגורים: "+muniObject.normative_arnona+"<br/>"+
-					        				"תעריף בפועל: "+muniObject.real_arnona+"<br/>"+
-					        				"<b>"+"הפרש התעריף בין המצוי לרצוי: "+muniObject.difference_arnona+"</b><br/>"; 
+					        				"תעריף נורמטיבי למגורים (ש״ח למ״ר ממוצע): "+muniObject.normative_arnona+" ש״ח<br/>"+
+					        				"תעריף בפועל (ש״ח למ״ר ממוצע): "+muniObject.real_arnona+" ש״ח<br/>"+
+					        				"<b>"+"הפרש התעריף בין המצוי לרצוי: "+muniObject.difference_arnona+" ש״ח</b><br/>"; 
 
 					        geojsonLayer.bindPopup(content);
 
