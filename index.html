@@ -80,28 +80,6 @@
 		
 		map.legendControl.addLegend(document.getElementById('legend').innerHTML);		
 
-	
-		// function onLocationFound(e) {
-		// 	var radius = e.accuracy / 2;
-
-		// 	L.marker(e.latlng).addTo(map)
-		// 		.bindPopup("אתם נמצאים " + radius + " מטרים מכאן").openPopup();
-
-		// 	L.circle(e.latlng, radius).addTo(map);
-		// }
-
-		// function onLocationError(e) {
-		// 	alert(e.message);
-		// }
-
-		// map.on('locationfound', onLocationFound);
-		// map.on('locationerror', onLocationError);
-
-		// map.locate({setView: true, maxZoom: 16});
-		// //map.setView([31.782,35.21933], 16);
-
-		
-
 
 		Papa.parse("./data/munis-arnona.csv", {
 			header: false,
@@ -149,6 +127,7 @@
 			        	var layerStyle = {
 								        fillColor: getDifferenceColor(line[9]-line[7]),
 								        color: 'black',
+								        weight: 1.0,
 								        fillOpacity: 0.6,
 									};
 
