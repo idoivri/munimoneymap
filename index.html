@@ -70,17 +70,7 @@
 
 	<script>
 
-
-		var getDifferenceColor = function (d) {
-			// console.log("got difference ",d);
-		    return d < 0 ? '#005824' :
-		           d < 5  ? '#fee5d9' :
-		           d < 10  ? '#fcbba1' :
-		           d < 15  ? '#fc9272' :
-		           d < 20   ? '#fb6a4a' :
-		           d < 25   ? '#de2d26' :
-		                      '#a50f15';
-		}
+		muni2ContentDict = {};
 
 		// Provide your access token
 		L.mapbox.accessToken = 'pk.eyJ1IjoiaWRvaXZyaSIsImEiOiJtSDZZd0dzIn0.AGwQs7X6LESuybqo6fUVpg#10';
@@ -126,10 +116,6 @@
 					//console.log(results.data[i]);
 					line = results.data[i];
 
-
-
-
-
 			        //console.log("COORDS: " + line[12] + "," + line[11]);
 			        if (line[0]===undefined || line[0]==="") {
 			        	console.log("No hebrew name for municipalitiy");	
@@ -144,49 +130,96 @@
 
 			        	name = line[1]; //url name relies 
 
-			      //   	var layerStyle = {
-								 //        fillColor: getDifferenceColor(line[line.length-1]),
-								 //        color: 'black',
-								 //        fillOpacity: 0.6,
-									// };
-
-						var urlString = 'http://cdn.rawgit.com/idoivri/israel-municipalities-polygons/master/'+name+'/'+name+'.geojson';
 
 
-						var geoJsonLayerData;
+						var urlString = 'https://cdn.rawgit.com/idoivri/israel-municipalities-polygons/master/'+name+'/'+name+'.geojson';
 
-						$.get(urlString, function(data) {
-							//console.log("data:",data);
-						  	geoJsonLayerData = data;
+						var getDifferenceColor = function (d) {
+							console.log("got difference ",d);
+						    return d < 0 ? '#005824' :
+						           d < 5  ? '#fee5d9' :
+						           d < 10  ? '#fcbba1' :
+						           d < 15  ? '#fc9272' :
+						           d < 20   ? '#fb6a4a' :
+						           d < 25   ? '#de2d26' :
+						                      '#a50f15';
+						}
 
-						  	if (!geoJsonLayerData) {
+			        	var layerStyle = {
+								        fillColor: getDifferenceColor(line[9]-line[7]),
+								        color: 'black',
+								        fillOpacity: 0.6,
+									};
+
+
+						muni2ContentDict[name] = {
+							muniHebName: line[0],
+							layerStyle: layerStyle,
+							normative_arnona: line[7],
+							real_arnona: line[9],
+							difference_arnona: line[9]-line[7]
+						};
+						
+
+
+
+
+						// $.ajax({
+						// 		  url: urlString,
+						// 		  data: layerStyle,
+								 
+						// 		  success: function (data) {
+						// 		  		console.log("success (url):",this.url);
+						// 		  		geoJsonLayerData = data;
+						// 		  }
+						// 		});
+
+						// // var success = function (layerStyle, success, data) {
+
+
+						 $.get(urlString, layerStyle, function(data, success) {
+
+
+						 	if (success !== "success") {
+						 		console.log("$.get() did not return success!");
+						 		return;
+						 	}
+							
+						  	if (!data) {
 								console.log("did not get geoJsonLayerData!");
 								return;
 							}
 
-								
+							var url = this.url;
 
-							var geojsonLayer = new L.GeoJSON(geoJsonLayerData, {style: {
-								fillColor: getDifferenceColor(line[14]),
-								color: 'black',
-								fillOpacity: 0.6}
-							}); 
+							var pathArray = url.split( '/' );
+							// console.log(pathArray);
+							// console.log(pathArray[6]);
+							var muniName = pathArray[6];
+
+							var muniObject = muni2ContentDict[muniName];
+							if (!muniObject) {
+								console.log("could not find muni object in dict!, muniName=",muniName);
+							}
+
+							var geojsonLayer = new L.GeoJSON(data, {style: muniObject.layerStyle}); 
 
 					        if (!geojsonLayer) {
-					        	console.log("coulnd't create get layer for: "+layer[0]);
+					        	console.log("coulnd't create get layer for: "+muniName);
 					        	return;
 					        }
 
-					        var content = "<b>"+line[0]+"</b><br/>"+
-					        				"תעריף נורמטיבי למגורים: "+line[7]+"<br/>"+
-					        				"תעריף בפועל: "+line[9]+"<br/>"+
-					        				"<b>"+"הפרש התעריף בין המצוי לרצוי: "+line[14]+"</b><br/>"; 
+					        var content = "<b>רשות מקומית: "+muniObject.muniHebName+"</b><br/>"+
+					        				"תעריף נורמטיבי למגורים: "+muniObject.normative_arnona+"<br/>"+
+					        				"תעריף בפועל: "+muniObject.real_arnona+"<br/>"+
+					        				"<b>"+"הפרש התעריף בין המצוי לרצוי: "+muniObject.difference_arnona+"</b><br/>"; 
 
 					        geojsonLayer.bindPopup(content);
 
 					        map.addLayer(geojsonLayer);
 
 						});
+					}
 
 						
 				     //    else {
@@ -200,38 +233,13 @@
 					    //     pruneCluster.RegisterMarker(marker);
 
 					    // }
-					}
+					
 				}
 				
 			}
 		});
 
 
-
-		// function createPopUpStr(arr) {
-		// 	console.log(arr);
-		// 	str = "<div class=\"marker\">"
-		// 	str += "<b>קלפי מספר:" + arr[4] + "</b><br/>";
-		// 	str += "בנפה: " + arr[2] + "<br/>";
-		// 	str += "כתובת: " + arr[0] + "<br/>";
-		// 	str += "מיקום הקלפי: " + arr[5] + "<br/>";
-		// 	if (arr[6]=="כ") {
-		// 		str += "<b>קלפי נגישה ";
-		// 		if (arr[7]=="כ") {
-		// 			str+="מיוחדת";
-		// 		} 
-		// 		str +="</b><br/>";
-		// 	}
-			
-		// 	/*str += "<a href=\"tel:"+arr[2]+"\">"+arr[2]+"</a><br/>";
-		// 	if (arr[3]!="") {
-		// 		str += "<a href=\"http://"+arr[3]+"\" target=\"_blank\">"+arr[3]+"</a><br/>";
-		// 	}
-		// 	str += arr[7] + "<br/>" + arr[8] + "<br/>";*/
-		// 	str += "</div>";
-
-		// 	return str;	
-		// };
 
 
 
