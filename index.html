@@ -43,7 +43,7 @@
 	  </div>
 	  <nav class='legend clearfix'>
 	  	<!-- http://colorbrewer2.org/ -->
-	    <span style='background:#005824;'></span>
+	    <span style='background:#1550a3;'></span>
 	    <span style='background:#fee5d9;'></span>
 	    <span style='background:#fcbba1;'></span>
 	    <span style='background:#fc9272;'></span>
@@ -111,7 +111,7 @@
 
 						var getDifferenceColor = function (d) {
 							console.log("got difference ",d);
-						    return d < 0 ? '#005824' :
+						    return d < 0 ? '#1550a3' :
 						           d < 5  ? '#fee5d9' :
 						           d < 10  ? '#fcbba1' :
 						           d < 15  ? '#fc9272' :
@@ -188,7 +188,7 @@
 					        var content = "<b>רשות מקומית: "+muniObject.muniHebName+"</b><br/>"+
 					        				"תעריף נורמטיבי למגורים (ש״ח למ״ר ממוצע): "+muniObject.normative_arnona+" ש״ח<br/>"+
 					        				"תעריף בפועל (ש״ח למ״ר ממוצע): "+muniObject.real_arnona+" ש״ח<br/>"+
-					        				"<b>"+"הפרש התעריף בין המצוי לרצוי: "+muniObject.difference_arnona+" ש״ח</b><br/>"; 
+					        				"<b>"+"הפרש התעריף בין המצוי לרצוי:<span dir='ltr'> "+muniObject.difference_arnona.toFixed(0)+" </span> ש״ח</b><br/>"; 
 
 					        geojsonLayer.bindPopup(content);
 
